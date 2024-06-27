@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
-const url = 'mongodb+srv://enz:Bxxmin%4066%402024@premier-cluster-test.i1gqm07.mongodb.net/checkpoint?retryWrites=true&w=majority&appName=Premier-Cluster-Test'
+
+require('dotenv').config()
+const url = process.env.MONGOURI
 
 const connexion = async () => {
     try {
