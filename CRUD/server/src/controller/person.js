@@ -2,14 +2,14 @@ const personModel = require('../model/Person')
 const db = require('../db/db')
 
 const createPerson = async (req, res) => {
-    const data = req.body
+    let data = req.body
     data = {...data, favoriteFoods: data.favoriteFoods.split(',')}
     const person = new personModel(data)
     await db.connexion()
      try {
-        rep =  await person.save()
-        const msg = 'Personne ajouté avec succès !'
-        res.status(201).json({message: msg, data: res})
+        const rep =  await person.save()
+        const msg = 'Personne ajoutées avec succès !'
+        res.status(201).json({message: msg, data: rep})
      } catch (error) {
         const msg = 'Erreur lors de l\'enregistrement'
         res.status(500).json({message: msg, data: error})

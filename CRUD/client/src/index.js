@@ -5,6 +5,7 @@ import {createBrowserRouter, RouterProvider} from 'react-router-dom'
 import PageNotFound from './components/PageNotFound';
 import PersonDetails from './components/PersonDetails';
 import UpdatePerson from './components/UpdatePerson';
+import AjoutPersonne from './components/AjoutPersonne';
 
 const router = createBrowserRouter([
   {
@@ -13,7 +14,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/ajoutPersonne',
-    element: <h1>waw</h1>
+    element: <AjoutPersonne/>
   },
   {
     path: 'détails/:id',
