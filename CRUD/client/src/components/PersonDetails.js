@@ -26,6 +26,7 @@ const PersonDetails = () => {
                         <div>
                             <Link to='/'>&larr; Retour</Link>
                             <br />
+                            <br />
                             <h1>Nom : {details.nom}</h1>
                             <h2>Age : {details.age} ans</h2>
                             <h2>Plats préférés :</h2>

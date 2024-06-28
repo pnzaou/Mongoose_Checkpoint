@@ -1,14 +1,18 @@
 const personModel = require('../model/Person')
 const db = require('../db/db')
 
-const createPerson = async (p) => {
-    const person = new personModel(p)
+const createPerson = async (req, res) => {
+    const data = req.body
+    data = {...data, favoriteFoods: data.favoriteFoods.split(',')}
+    const person = new personModel(data)
     await db.connexion()
      try {
-        data =  await person.save()
-        console.log('Successful', data)
+        rep =  await person.save()
+        const msg = 'Personne ajouté avec succès !'
+        res.status(201).json({message: msg, data: res})
      } catch (error) {
-        console.log('Unsuccessful', error)
+        const msg = 'Erreur lors de l\'enregistrement'
+        res.status(500).json({message: msg, data: error})
      }
     await db.deconnexion()
 }
@@ -87,9 +91,11 @@ const findEditThenSave = async (personId) => {
 }
 
 const updatePerson = async (req, res) => {
+    let person = req.body
+    person = {...person, favoriteFoods: person.favoriteFoods.split(',')}
     await db.connexion()
     try {
-        const data = await personModel.findByIdAndUpdate(req.params.id, req.body, {new: true})
+        const data = await personModel.findByIdAndUpdate(req.params.id, person, {new: true})
         const msg = 'Utilisateur modifié avec succès !'
         res.status(201).json({message: msg, data: data})
     } catch (error) {
