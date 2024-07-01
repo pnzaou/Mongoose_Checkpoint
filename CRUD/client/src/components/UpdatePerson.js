@@ -1,23 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import Spinner from './Spinner';
+
 
 const UpdatePerson = () => {
     const [nom, setNom] = useState('')
     const [age, setAge] = useState('')
     const [food, setFood] = useState('')
+    const [loading, setLoading] = useState(true)
     const {id} = useParams()
     const navigate = useNavigate()
+
     useEffect(() => {
         fetch(`http://localhost:3006/persons/${id}`)
             .then(rep => rep.json())
             .then(data => {
                 setNom(data.data.nom)
                 setAge(data.data.age)
-                setFood(data.data.favoriteFoods)
-            }).catch(err => {
-                console.log(err);
-            })
+                setFood(data.data.favoriteFoods)})
+            .catch(err => {console.log(err);})
+            .finally(() => {setLoading(false)})
     }, [id])
+
     const changeValue = (e) => {
         if(e.target.id === 'nom'){
             setNom(e.target.value)
@@ -29,11 +33,11 @@ const UpdatePerson = () => {
             setFood(e.target.value)
         }
     }
+
     const updatePerson = (e) => {
         e.preventDefault()
         const form = e.currentTarget
         const data = new FormData(form)
-
 
         if(data.get('nom') === '' || data.get('age') === '' || data.get('food') === ''){
             alert('Tous les champs sont obligatoires')
@@ -55,10 +59,13 @@ const UpdatePerson = () => {
             .then(rep => rep.json())
             .then(data => {
                 console.log(data)
-                navigate('/')
-            })
+                navigate('/')})
+            .catch(err => {console.log(err);})
         }
     }
+
+    if(loading) return <Spinner/>
+
     return (
         <div className='flex justify-center items-center w-screen h-screen'>
             <div>
