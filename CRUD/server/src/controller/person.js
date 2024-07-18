@@ -1,11 +1,9 @@
 const personModel = require('../model/Person')
-const db = require('../db/db')
 
 const createPerson = async (req, res) => {
     let data = req.body
     data = {...data, favoriteFoods: data.favoriteFoods.split(',')}
     const person = new personModel(data)
-    await db.connexion()
      try {
         const rep =  await person.save()
         const msg = 'Personne ajoutées avec succès !'
@@ -14,22 +12,18 @@ const createPerson = async (req, res) => {
         const msg = 'Erreur lors de l\'enregistrement'
         res.status(500).json({message: msg, data: error})
      }
-    await db.deconnexion()
 }
 
 const createManyPersons = async (p) => {
-    await db.connexion()
     try {
         const data = await personModel.create(p)
         console.log('Successful', data)
     } catch (error) {
         console.log('Unsuccessful', error)
     }
-    await db.deconnexion()
 }
 
 const findAllPersons = async (req, res) => {
-    await db.connexion()
     try {
         const data = await personModel.find()
         const msg = 'Tous les utilisateurs ont été récupérés avec succès !'
@@ -38,11 +32,9 @@ const findAllPersons = async (req, res) => {
         const msg = 'Erreur lors de la récupération des utilisateurs !'
         res.status(500).json({message: msg, data: error.message})
     }
-    await db.deconnexion()
 }
 
 const findByName = async (n) => {
-    await db.connexion()
     try {
         const data = await personModel.find({nom: n})
         console.log('Successful')
@@ -50,22 +42,18 @@ const findByName = async (n) => {
     } catch(error) {
         console.log('Unsuccessful', error)
     }
-    await db.deconnexion()
 }
 
 const findByFavoriteFood = async (f) => {
-    await db.connexion()
     try {
         const data = await personModel.findOne({favoriteFoods: f})
         console.log('Successful', data)
     } catch (error) {
         console.log('Unsuccessful', error)
     }
-    await db.deconnexion()
 }
 
 const findById = async (req, res) => {
-    await db.connexion()
     try {
         const data = await personModel.findById(req.params.id)
         const msg = 'L\'utilisateur a été récupéré avec succès !'
@@ -74,11 +62,9 @@ const findById = async (req, res) => {
         const msg = 'Erreur lors de la récupération de l\'utilisateur !'
         res.status(500).json({msg:msg, data:error})
     }
-    await db.deconnexion()
 }
 
 const findEditThenSave = async (personId) => {
-    await db.connexion()
     try {
         const data = await personModel.findById(personId)
         data.favoriteFoods.push('hamburger')
@@ -87,13 +73,11 @@ const findEditThenSave = async (personId) => {
     } catch (error) {
         console.log('Unsuccessful', error)
     }
-    await db.deconnexion()
 }
 
 const updatePerson = async (req, res) => {
     let person = req.body
     person = {...person, favoriteFoods: person.favoriteFoods.split(',')}
-    await db.connexion()
     try {
         const data = await personModel.findByIdAndUpdate(req.params.id, person, {new: true})
         const msg = 'Utilisateur modifié avec succès !'
@@ -105,18 +89,15 @@ const updatePerson = async (req, res) => {
 }
 
 const updateAge = async (n) => {
-    await db.connexion()
     try {
         const data = await personModel.findOneAndUpdate({nom: n}, {age: 20}, {new: true})
         console.log('Successful', data)
     } catch (error) {
         console.log('Unsuccessful', error)
     }
-    await db.deconnexion()
 }
 
 const deletePerson = async (req, res) => {
-    await db.connexion()
     try {
         const rep = await personModel.findByIdAndDelete(req.params.id)
         const msg = 'l\'utilisateur a été supprimé avec succès !'
@@ -124,22 +105,18 @@ const deletePerson = async (req, res) => {
     } catch (error) {
         res.status(500).json({message: msg, data: error})
     }
-    await db.deconnexion()
 }
 
 const deleteManyPersons = async () => {
-    await db.connexion()
     try {
         const rep = await personModel.deleteMany({nom: 'Mary'})
         console.log('Successful', rep)
     } catch (error) {
         console.log('Unsuccessful', error)
     }
-    await db.deconnexion()
 }
 
 const search = async () => {
-    await db.connexion()
     try {
         const data = await personModel.find({favoriteFoods: 'Burritos'})
         .sort({nom : 1}).limit(2).select('-age')
@@ -148,7 +125,6 @@ const search = async () => {
     } catch (error) {
         console.log('Unsuccessful', error)
     }
-    await db.deconnexion()
 }
 
 module.exports = {

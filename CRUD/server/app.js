@@ -4,12 +4,18 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 
 const app = express()
-const port = 3006
+
+require('dotenv').config()
+const port = process.env.PORT
 
 app
     .use(cors())
     .use(bodyParser.json())
     .use(router)
+
+const {connexion} = require('./src/db/db')
+
+connexion()
 
 app.listen(port, ()=>{
     console.log(`http://localhost:${port}`);
